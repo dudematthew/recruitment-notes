@@ -16,6 +16,7 @@ body {
 	font-weight: 400;
 	font-style: normal;
 	line-height: 1.6;
+	color: #1b1c1e;
 }
 
 h1,
@@ -26,53 +27,40 @@ h5,
 h6 {
 	margin: 0;
 	padding: 0;
-	font-family: "Arial", sans-serif;
 }
 
 h1 {
 	font-size: 2.5rem;
-	font-weight: 300;
-	color: #333;
-	margin-bottom: 0.5rem;
+	font-weight: 500;
 }
 
 h2 {
-	font-size: 2rem;
-	font-weight: 300;
-	color: #444;
-	margin-bottom: 0.5rem;
+	font-size: 1.25rem;
+	font-weight: 500;
 }
 
 h3 {
 	font-size: 1.75rem;
 	font-weight: 300;
-	color: #555;
-	margin-bottom: 0.5rem;
 }
 
 h4 {
 	font-size: 1.5rem;
 	font-weight: 300;
-	color: #666;
-	margin-bottom: 0.5rem;
 }
 
 h5 {
 	font-size: 1.25rem;
 	font-weight: 300;
-	color: #777;
-	margin-bottom: 0.5rem;
 }
 
 h6 {
 	font-size: 1rem;
 	font-weight: 300;
-	color: #888;
-	margin-bottom: 0.5rem;
 }
 
 /* Testing */
-h1 {
+/* h1 {
 	border-bottom: 2px solid #ddd;
 	padding-bottom: 0.5rem;
 }
@@ -96,9 +84,4 @@ h5 {
 
 h6 {
 	text-decoration: underline;
-}
-
-.container {
-	padding: 20px;
-	max-width: 1200px;
-}
+} */

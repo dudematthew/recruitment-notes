@@ -1,0 +1,78 @@
+.container {
+	padding: 20px;
+	max-width: 1200px;
+	margin: auto;
+	display: flex;
+	flex-direction: column;
+	gap: 24px;
+}
+
+.header {
+	display: flex;
+	flex-direction: column;
+	gap: 24px;
+}
+
+.header__main-title {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+}
+
+.search {
+	display: flex;
+	align-items: center; /* Centrowanie w pionie */
+	padding: 8px 12px;
+	background: #eeeff0;
+	border-radius: 12px;
+	color: #5b5c5e;
+}
+
+.search .icon {
+	flex-shrink: 0; /* prevents icon shrinking */
+	width: 1.2em;
+	height: 1.2em;
+	background-size: contain;
+	background-repeat: no-repeat;
+	margin-right: 12px;
+	background-color: #5b5c5e;
+}
+
+.search__input {
+	border: none;
+	background: transparent;
+	line-height: 25.6px;
+	width: 100%; /* Rozciąga input na resztę miejsca */
+	outline: none; /* Usuwa niechciane obramowanie */
+}
+
+.search__input:focus {
+	border: none;
+}
+
+.content {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	padding-block: 36px;
+}
+
+.badge {
+	width: 52.21px;
+	height: 52.21px;
+	background-color: #1b1c1e;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	border-radius: 50%;
+	-webkit-border-radius: 50%;
+	-moz-border-radius: 50%;
+	-ms-border-radius: 50%;
+	-o-border-radius: 50%;
+}
+
+.badge .icon {
+	width: 24px;
+	height: 24px;
+	background-color: white;
+}

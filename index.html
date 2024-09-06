@@ -2,38 +2,43 @@
 <html lang="en">
 
 <head>
+    <title>Notes</title>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Notes</title>
     <meta name="description" content="A simple pure-web note taking app created for recruitment purposes.">
     <meta name="keywords" content="Notes, Recruitment">
-    <link rel="icon" type="image/png" href="favicon.png">
     <meta name="author" content="dudematthew">
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" />
-    <link rel="stylesheet" href="main.css">
-    <link rel="stylesheet" href="icons/icons.css">
+    <link rel="icon" type="image/png" href="favicon.png">
 
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="styles/elements.css">
+    <link rel="stylesheet" href="icons/icons.css">
 </head>
 
 <body>
     <div class="container">
-        <header>
-            <h1><i class="icon icon--note"></i> Notes</h1>
-            <h2><i class="icon icon--note"></i> Notes</h2>
-            <h3><i class="icon icon--note"></i> Notes</h3>
-            <h4><i class="icon icon--note"></i> Notes</h4>
-            <h5><i class="icon icon--note"></i> Notes</h5>
-            <h6><i class="icon icon--note"></i> Notes</h6>
-            <h7><i class="icon icon--note"></i> Notes</h7>
+        <header class="header">
+            <h2 class="header__main-title">
+                <i class="icon icon--note"></i> Notes
+            </h2>
+            <div class="search">
+                <i class="icon icon--magnifier"></i>
+                <input class="search__input" type="text" placeholder="Search notes...">
+            </div>
         </header>
-        <main>
-
+        <main class="content">
+            <div class="info-notes-empty">
+                <div class="badge">
+                    <i class="icon icon--info"></i>
+                </div>
+                <h3>No notes yet</h3>
+            </div>
         </main>
     </div>
 
     <script src="./main.js"></script>
-    <script src="https://kit.fontawesome.com/768ac794b7.js" crossorigin="anonymous"></script>
 </body>
 
 </html>

@@ -3,34 +3,34 @@ provided figma as to follow the no-framework rule*/
 
 .icon {
 	display: inline-block;
-	width: 0.75em;
-	height: 0.75em;
-	background-size: contain;
-	background-repeat: no-repeat;
-	vertical-align: text-bottom;
-	margin-bottom: 0.21em; /* Align to center */
+	width: 0.8em;
+	height: 0.8em;
+	background-color: #1b1c1e; /* Kolor, który chcesz nałożyć na SVG */
+	mask-size: contain;
+	mask-repeat: no-repeat;
+	mask-position: center;
 }
 
 .icon--edit {
-	background-image: url("edit.svg");
+	mask-image: url("edit.svg");
 }
 
 .icon--magnifier {
-	background-image: url("magnifier.svg");
+	mask-image: url("magnifier.svg");
 }
 
 .icon--note-add {
-	background-image: url("note-add.svg");
+	mask-image: url("note-add.svg");
 }
 
 .icon--note {
-	background-image: url("note.svg");
+	mask-image: url("note.svg");
 }
 
 .icon--trash-can {
-	background-image: url("trash-can.svg");
+	mask-image: url("trash-can.svg");
 }
 
 .icon--info {
-	background-image: url("info.svg");
+	mask-image: url("info.svg");
 }
