@@ -86,7 +86,7 @@ a.cancel-button:hover {
 	text-decoration: underline;
 }
 
-/* Inputs */
+/* Inputs ------------------ */
 
 .input {
 	border: none;
@@ -117,7 +117,7 @@ a.cancel-button:hover {
 	color: #1b1c1e;
 }
 
-/* Search */
+/* Search ------------------ */
 
 .search {
 	position: relative;
