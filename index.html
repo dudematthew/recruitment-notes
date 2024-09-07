@@ -15,28 +15,81 @@
     <link rel="stylesheet" href="styles/main.css">
     <link rel="stylesheet" href="styles/elements.css">
     <link rel="stylesheet" href="icons/icons.css">
+    <link rel="stylesheet" href="styles/modifiers.css">
 </head>
 
 <body>
     <div class="container">
         <header class="header">
-            <h2 class="header__main-title">
+            <h5 class="header__main-title">
                 <i class="icon icon--note"></i> Notes
-            </h2>
+            </h5>
             <div class="search">
                 <i class="icon icon--magnifier"></i>
-                <input class="search__input" type="text" placeholder="Search notes...">
+                <input class="input input--search" type="text" placeholder="Search notes...">
             </div>
+            <button class="button button--primary">Add New</button>
         </header>
+        <div class="add-note is-hidden">
+            <div class="add-note__header">
+                <h6>Add new note</h6>
+                <a href="#" class="cancel-button">Cancel</a>
+            </div>
+            <input class="input" type="text" placeholder="Untitled Note">
+            <div class="add-note__content">
+                <textarea class="input" placeholder="Your note..."></textarea>
+                <button class="button button--primary">Add</button>
+            </div>
+        </div>
         <main class="content">
-            <div class="info-notes-empty">
+            <div class="info-notes-empty is-hidden">
                 <div class="badge">
                     <i class="icon icon--info"></i>
                 </div>
-                <h3>No notes yet</h3>
+                <h5>No notes yet</h5>
+                <span>Add a note to keep track of your learnings.</span>
+                <button class="button button--secondary">
+                    <i class="icon icon--note-add"></i>
+                    <span>Add Note</span>
+                </button>
+            </div>
+            <div class="notes">
+                <div class="note multiply">
+                    <div class="note__header">
+                        <h6>Note Title</h6>
+                        <div class="note__header__buttons">
+                            <i class="icon icon--edit"></i>
+                            <i class="icon icon--trash-can"></i>
+                        </div>
+                    </div>
+                    <div class="note__body">
+                        Very long Note Body to give you an example on how the box should act
+                    </div>
+                    <time datetime="2024-05-22" class="note__date">May 22</time>
+                </div>
             </div>
         </main>
+        <div class="modals is-hidden">
+            <div class="modal">
+                <h5>Delete Note</h5>
+                <span>Are you sure you want to delete this note?</span>
+                <div class="modal__buttons">
+                    <button class="button button--secondary">Cancel</button>
+                    <button class="button button--primary">Delete</button>
+                </div>
+            </div>
+        </div>
     </div>
+
+    <script>
+        // Simple quick code to duplicate notes
+        document.querySelectorAll('.multiply').forEach(element => {
+            for (let i = 0; i < 5; i++) {
+                const clone = element.cloneNode(true);
+                element.parentNode.insertBefore(clone, element.nextSibling);
+            }
+        });
+    </script>
 
     <script src="./main.js"></script>
 </body>

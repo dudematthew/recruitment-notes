@@ -1,5 +1,5 @@
 .container {
-	padding: 20px;
+	padding-block: 20px;
 	max-width: 1200px;
 	margin: auto;
 	display: flex;
@@ -7,10 +7,13 @@
 	gap: 24px;
 }
 
+/* Header ------------------ */
+
 .header {
 	display: flex;
 	flex-direction: column;
 	gap: 24px;
+	padding-inline: 20px;
 }
 
 .header__main-title {
@@ -19,43 +22,148 @@
 	gap: 8px;
 }
 
-.search {
+/* Buttons ------------------ */
+
+.button {
+	padding: 8px 16px;
+	font-weight: 500;
+	line-height: 24px;
+	font-size: 1em;
+	border: 1px solid #bcbcbd;
 	display: flex;
-	align-items: center; /* Centrowanie w pionie */
-	padding: 8px 12px;
-	background: #eeeff0;
+	align-items: center;
+	justify-content: center;
+	gap: 8px;
+	width: 100%;
+
 	border-radius: 12px;
-	color: #5b5c5e;
+	-webkit-border-radius: 12px;
+	-moz-border-radius: 12px;
+	-ms-border-radius: 12px;
+	-o-border-radius: 12px;
+}
+
+.button .icon {
+	width: 1.5em;
+	height: 1.5em;
+}
+
+.button--secondary {
+	background-color: white;
+	border: 1px solid #bcbcbd;
+}
+
+.button--secondary:hover {
+	background-color: #e7e7e7;
+	cursor: pointer;
+}
+
+.button--secondary:focus {
+	background: #bdbdbd;
+	border: 1px solid #bcbcbd;
+}
+
+.button--primary {
+	color: white;
+	background-color: #6b3c9b;
+}
+
+.button--primary:hover {
+	background-color: #844dba;
+}
+
+.button--primary:focus {
+	background-color: #5b2f87;
+}
+
+a.cancel-button {
+	color: #0f75b8;
+	font-size: 0.875rem;
+	text-decoration: none;
+}
+
+a.cancel-button:hover {
+	text-decoration: underline;
+}
+
+/* Inputs */
+
+.input {
+	border: none;
+	background-color: #eeeff0;
+	line-height: 25.6px;
+	font-size: 1rem;
+	width: 100%;
+	outline: none;
+	padding: 8px 12px;
+	border-radius: 12px;
+	-webkit-border-radius: 12px;
+	-moz-border-radius: 12px;
+	-ms-border-radius: 12px;
+	-o-border-radius: 12px;
+}
+
+.input:hover {
+	background-color: #dcdee0;
+}
+
+.input:focus {
+	background-color: white;
+	border: 1px solid #1b1c1e;
+}
+
+/* Might not make sense but that was suggested by Figma */
+.input:focus::placeholder {
+	color: #1b1c1e;
+}
+
+/* Search */
+
+.search {
+	position: relative;
+	width: 100%;
 }
 
 .search .icon {
-	flex-shrink: 0; /* prevents icon shrinking */
-	width: 1.2em;
-	height: 1.2em;
+	position: absolute;
+	left: 12px;
+	top: 50%;
+	width: 1.5em;
+	height: 1.5em;
 	background-size: contain;
 	background-repeat: no-repeat;
-	margin-right: 12px;
 	background-color: #5b5c5e;
+	transform: translateY(-50%);
+	-webkit-transform: translateY(-50%);
+	-moz-transform: translateY(-50%);
+	-ms-transform: translateY(-50%);
+	-o-transform: translateY(-50%);
 }
 
-.search__input {
-	border: none;
-	background: transparent;
+.input--search {
 	line-height: 25.6px;
-	width: 100%; /* Rozciąga input na resztę miejsca */
-	outline: none; /* Usuwa niechciane obramowanie */
-}
-
-.search__input:focus {
-	border: none;
+	padding: 8px 12px 8px 48px;
+	font-size: 1rem;
+	width: 100%;
+	outline: none;
 }
 
 .content {
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-	padding-block: 36px;
 }
+
+.info-notes-empty {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	text-align: center;
+	width: 303px;
+	gap: 16px;
+}
+
+/* Badge ------------------ */
 
 .badge {
 	width: 52.21px;
@@ -76,3 +184,135 @@
 	height: 24px;
 	background-color: white;
 }
+
+/* Notes ------------------ */
+
+.notes {
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	flex: 1;
+	gap: 16px;
+	padding-inline: 20px;
+}
+
+.note {
+	width: 100%;
+	background: white;
+	padding: 12px;
+	box-shadow: 0px 4px 16px 0px #00000012;
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+
+	border-radius: 12px;
+	-webkit-border-radius: 12px;
+	-moz-border-radius: 12px;
+	-ms-border-radius: 12px;
+	-o-border-radius: 12px;
+}
+
+.note__header {
+	display: flex;
+	justify-content: space-between;
+}
+
+.note__header__buttons {
+	display: flex;
+	gap: 8px;
+}
+
+.note__header__buttons .icon {
+	width: 20px;
+	height: 20px;
+}
+
+.note__body {
+	font-size: 0.875rem;
+}
+
+.note__date {
+	font-size: 0.75rem;
+}
+
+/* Modals ------------------ */
+
+.modals {
+	position: absolute;
+	left: 0;
+	top: 0;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 100%;
+	height: 100%;
+	background: #0000004d;
+}
+
+.modal {
+	display: flex;
+	flex-direction: column;
+	gap: 24px;
+	padding: 24px;
+	background-color: white;
+
+	border-radius: 16px;
+	-webkit-border-radius: 16px;
+	-moz-border-radius: 16px;
+	-ms-border-radius: 16px;
+	-o-border-radius: 16px;
+}
+
+.modal__buttons {
+	display: flex;
+	gap: 16px;
+}
+
+/* Add note ------------------ */
+
+.add-note {
+	display: flex;
+	flex-direction: column;
+	gap: 16px;
+	padding: 16px 20px;
+	box-shadow: 0px 0px 16px 0px #00000014;
+	border-width: 1px, 0px, 1px, 0px;
+	border-style: solid;
+	border-color: #eeeff0;
+}
+
+.add-note__header {
+	display: flex;
+	justify-content: space-between;
+}
+
+.add-note__content {
+	height: 210px;
+	position: relative;
+}
+
+.add-note__content textarea {
+	width: 100%;
+	min-height: 100%;
+	resize: none; /* I assumed that textarea resize is purely cosmetical. I can always update the code if the change is necessary. */
+}
+
+.add-note__content button {
+	position: absolute;
+	width: auto;
+	bottom: 12px;
+	right: 8px;
+}
+
+/* Uncomment to hide the button when the textarea is unfocused. 
+   This approach was initially considered, but it was determined that hiding the button
+   could negatively impact the user experience. The button remains visible at all times
+   to ensure users have consistent access to the action they need. */
+
+/* .add-note__content button {
+    opacity: 0;
+}
+
+.add-note__content textarea:focus + button {
+    opacity: 1;
+} */
