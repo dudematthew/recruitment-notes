@@ -61,13 +61,13 @@ export default class App {
             hideModalsAction: this.#el.querySelectorAll('[data-action="hide-modals"]'),
             editNoteConfirmAction: this.#el.querySelectorAll('[data-action="edit-note-confirm"]'),
             confirmDeleteAction: this.#el.querySelectorAll('[data-action="delete-note-confirm"]'),
+            searchNotesAction: this.#el.querySelectorAll('[data-action="search-notes"]'),
 
             // Roles
             addButtonRole: this.#el.querySelector('[data-role="add-note"]'),
             addNoteFormRole: this.#el.querySelector('[data-role="add-note-form"]'),
             newNoteFormTitle: this.#el.querySelector('[data-role="new-note-title"]'),
             newNoteFormContent: this.#el.querySelector('[data-role="new-note-content"]'),
-            searchInputRole: this.#el.querySelector('[data-role="search-input"]'),
             notesContainerRole: this.#el.querySelector('[data-role="notes-container"]'),
             infoNotesEmptyRole: this.#el.querySelector('[data-role="info-notes-empty"]'),
             editNoteModalRole: this.#el.querySelector('[data-role="edit-note-modal"]'),
@@ -75,6 +75,7 @@ export default class App {
             modalsContainerRole: this.#el.querySelector('[data-role="modals-container"]'),
             editNoteFormTitle: this.#el.querySelector('[data-role="edit-note-title"]'),
             editNoteFormContent: this.#el.querySelector('[data-role="edit-note-content"]'),
+            searchInputRole: this.#el.querySelector('[data-role="search-input"]'),
         };
     }
 
@@ -95,6 +96,16 @@ export default class App {
         });
     }
 
+    // Debounce function to prevent search lag
+    #debounce(func, wait) {
+        let timeout;
+        return function (...args) {
+            clearTimeout(timeout);
+            timeout = setTimeout(() => func.apply(this, args), wait);
+        };
+    }
+
+
     /**
      * Applies is-hidden class or removes it
      * @param {HTMLElement} element 
@@ -112,55 +123,49 @@ export default class App {
 
     #addActionEventListener(elements, action, callback) {
         elements.forEach(element => {
-            element.addEventListener(action, callback(element));
+            element.addEventListener(action, callback);
         });
     }
 
+
     #setupEventListeners() {
         // Add note action
-        this.#addActionEventListener(this.#elements.addNoteAction, 'click', (e) => {
-            e.addEventListener('click', (e) => {
-                this.#data.ongoingAddNoteOperation = true;
-            });
+        this.#addActionEventListener(this.#elements.addNoteAction, 'click', () => {
+            this.#data.ongoingAddNoteOperation = true;
         })
 
         // Cancel adding note action
-        this.#addActionEventListener(this.#elements.cancelAddNoteAction, 'click', (e) => {
-            e.addEventListener('click', (e) => {
-                this.#data.ongoingAddNoteOperation = false;
-            });
+        this.#addActionEventListener(this.#elements.cancelAddNoteAction, 'click', () => {
+            this.#data.ongoingAddNoteOperation = false;
         })
 
         // Submit new note
-        this.#addActionEventListener(this.#elements.submitNewNoteAction, 'click', (e) => {
-            e.addEventListener('click', (e) => {
-                this.#data.ongoingAddNoteOperation = false;
-                this.#submitNote();
-            });
+        this.#addActionEventListener(this.#elements.submitNewNoteAction, 'click', () => {
+            this.#data.ongoingAddNoteOperation = false;
+            this.#submitNote();
         })
 
         // Hide all modals
-        this.#addActionEventListener(this.#elements.hideModalsAction, 'click', (e) => {
-            e.addEventListener('click', (e) => {
-                this.#data.currentlyEditedNote = null;
-                this.#data.currentlyRemovedNote = null;
-                this.#render();
-            });
+        this.#addActionEventListener(this.#elements.hideModalsAction, 'click', () => {
+            this.#data.currentlyEditedNote = null;
+            this.#data.currentlyRemovedNote = null;
+            this.#render();
         })
 
         // Confirm editing note
-        this.#addActionEventListener(this.#elements.editNoteConfirmAction, 'click', (e) => {
-            e.addEventListener('click', (e) => {
-                this.#submitEditNote();
-            });
+        this.#addActionEventListener(this.#elements.editNoteConfirmAction, 'click', () => {
+            this.#submitEditNote();
         });
 
         // Confirm deleting note
-        this.#addActionEventListener(this.#elements.confirmDeleteAction, 'click', (e) => {
-            e.addEventListener('click', (e) => {
-                this.#confirmDeleteNote();
-            });
+        this.#addActionEventListener(this.#elements.confirmDeleteAction, 'click', () => {
+            this.#confirmDeleteNote();
         });
+
+        this.#addActionEventListener(this.#elements.searchNotesAction, 'keyup', this.#debounce((e) => {
+            const searchTerm = this.#elements.searchInputRole.value;  // Get the search term from the input
+            this.#filterNotes(searchTerm);      // Filter notes based on the search term
+        }, 50)); // 50 ms debounce time
 
     }
 
@@ -249,6 +254,18 @@ export default class App {
         this.#hideModal();
     }
 
+    // Function to filter notes based on search input
+    #filterNotes(searchTerm) {
+        const filteredNotes = this.#data.notes.filter(note => {
+            const titleMatch = note.title.toLowerCase().includes(searchTerm.toLowerCase());
+            const contentMatch = note.content.toLowerCase().includes(searchTerm.toLowerCase());
+            return titleMatch || contentMatch;
+        });
+
+        // Render only the filtered notes
+        this.#renderNotes(filteredNotes);
+    }
+
 
     #createNewNote(title, content, date) {
         let note = new NoteComponent();
@@ -310,7 +327,7 @@ export default class App {
         return !deepEqual(previousData, currentData);
     }
 
-    // Rerenders app
+    // Renders app
     #render() {
         const currentData = this.#data;
         const previousData = this.#previousData;
@@ -356,5 +373,4 @@ export default class App {
         else
             this.#hideModal();
     }
-
 }
