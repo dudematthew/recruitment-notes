@@ -3,9 +3,7 @@ export default class NoteComponent extends HTMLElement {
         super();
         this._title = this.getAttribute('title') || '';
         this._content = this.getAttribute('content') || '';
-
-        const dateAttr = this.getAttribute('date');
-        this._date = dateAttr ? new Date(dateAttr) : new Date();
+        this._date = new Date(this.getAttribute('date') || Date.now());
 
         this.classList.add('note');
     }
@@ -20,18 +18,18 @@ export default class NoteComponent extends HTMLElement {
         const formattedDate = this.#formatDateToMonthDay(this._date);
 
         this.innerHTML = `
-      <div class="note__header">
-        <h6 class="note-title">${this._title}</h6>
-        <div class="note__header__buttons">
-          <i class="icon icon--edit"></i>
-          <i class="icon icon--trash-can"></i>
-        </div>
-      </div>
-      <div class="note__body">
-        <p class="note-content">${this._content}</p>
-      </div>
-      <time datetime="${dateISO}" class="note__date">${formattedDate}</time>
-    `;
+            <div class="note__header">
+                <h6 class="note-title">${this._title}</h6>
+                <div class="note__header__buttons">
+                    <i class="icon icon--edit"></i>
+                    <i class="icon icon--trash-can"></i>
+                </div>
+            </div>
+            <div class="note__body">
+                <p class="note-content">${this._content}</p>
+            </div>
+            <time datetime="${dateISO}" class="note__date">${formattedDate}</time>
+        `;
     }
 
     #formatDateToMonthDay(date) {
@@ -50,7 +48,7 @@ export default class NoteComponent extends HTMLElement {
     }
 
     #handleDelete() {
-        const event = new CustomEvent('deleteNote', { detail: { title: this._title } });
+        const event = new CustomEvent('deleteNote', { detail: { id: this.id } }); // Use the ID
         this.dispatchEvent(event);
     }
 
@@ -79,6 +77,14 @@ export default class NoteComponent extends HTMLElement {
 
     get date() {
         return this._date;
+    }
+
+    get id() {
+        return this.getAttribute('id');
+    }
+
+    set id(newId) {
+        this.setAttribute('id', newId);
     }
 }
 
