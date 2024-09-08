@@ -43,12 +43,12 @@ export default class NoteComponent extends HTMLElement {
     }
 
     #handleEdit() {
-        const event = new CustomEvent('editNote', { detail: { title: this._title } });
+        const event = new CustomEvent('editNote', { detail: { id: this.id } });
         this.dispatchEvent(event);
     }
 
     #handleDelete() {
-        const event = new CustomEvent('deleteNote', { detail: { id: this.id } }); // Use the ID
+        const event = new CustomEvent('deleteNote', { detail: { id: this.id } });
         this.dispatchEvent(event);
     }
 

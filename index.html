@@ -70,23 +70,23 @@
                 </div> -->
             </div>
         </main>
-        <div class="modals is-hidden">
-            <div class="modal is-hidden">
+        <div data-role="modals-container" class="modals is-hidden">
+            <div data-role="delete-note-modal" class="modal is-hidden">
                 <h5>Delete Note</h5>
                 <span>Are you sure you want to delete this note?</span>
                 <div class="modal__buttons">
-                    <button class="button button--secondary">Cancel</button>
+                    <button data-action="hide-modals" class="button button--secondary">Cancel</button>
                     <button class="button button--primary">Delete</button>
                 </div>
             </div>
-            <div class="modal is-hidden">
+            <div data-role="edit-note-modal" class="modal is-hidden">
                 <h5>Edit Note</h5>
-                <span>Modify your note.</span>
-                <input class="input" type="text" placeholder="Note title">
-                <textarea class="input" placeholder="Your note..."></textarea>
+                <span>Change title or description of your note.</span>
+                <input data-role="edit-note-title" class="input" type="text" placeholder="Note title">
+                <textarea data-role="edit-note-content" class="input" placeholder="Your note..."></textarea>
                 <div class="modal__buttons">
-                    <button class="button button--secondary">Cancel</button>
-                    <button class="button button--primary">Save</button>
+                    <button data-action="hide-modals" class="button button--secondary">Cancel</button>
+                    <button data-action="edit-note-confirm" class="button button--primary">Save</button>
                 </div>
             </div>
         </div>

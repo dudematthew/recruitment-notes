@@ -31,6 +31,12 @@ export default class App {
             /** @type {boolean} */
             ongoingEditNoteOperation: false,
 
+            /** @type {null | string} */
+            currentlyEditedNote: null,
+
+            /** @type {null | string} */
+            currentlyRemovedNote: null,
+
             /** @type {Array<Note>} */
             notes: [],
         };
@@ -52,6 +58,8 @@ export default class App {
             addNoteAction: this.#el.querySelectorAll('[data-action="add-new-note"]'),
             cancelAddNoteAction: this.#el.querySelectorAll('[data-action="cancel-new-note"]'),
             submitNewNoteAction: this.#el.querySelectorAll('[data-action="submit-new-note"]'),
+            hideModalsAction: this.#el.querySelectorAll('[data-action="hide-modals"]'),
+            editNoteConfirmAction: this.#el.querySelectorAll('[data-action="edit-note-confirm"]'),
 
             // Roles
             addButtonRole: this.#el.querySelector('[data-role="add-note"]'),
@@ -61,6 +69,11 @@ export default class App {
             searchInputRole: this.#el.querySelector('[data-role="search-input"]'),
             notesContainerRole: this.#el.querySelector('[data-role="notes-container"]'),
             infoNotesEmptyRole: this.#el.querySelector('[data-role="info-notes-empty"]'),
+            editNoteModalRole: this.#el.querySelector('[data-role="edit-note-modal"]'),
+            deleteNoteModalRole: this.#el.querySelector('[data-role="delete-note-modal"]'),
+            modalsContainerRole: this.#el.querySelector('[data-role="modals-container"]'),
+            editNoteFormTitle: this.#el.querySelector('[data-role="edit-note-title"]'),
+            editNoteFormContent: this.#el.querySelector('[data-role="edit-note-content"]'),
         };
     }
 
@@ -125,9 +138,58 @@ export default class App {
             });
         })
 
-        // this.#el.querySelector('.search .input--search').addEventListener('input', (e) => {
-        //     this.#filterNotes(e.target.value);
-        // });
+        // Hide all modals
+        this.#addActionEventListener(this.#elements.hideModalsAction, 'click', (e) => {
+            e.addEventListener('click', (e) => {
+                this.#data.currentlyEditedNote = null;
+                this.#data.currentlyRemovedNote = null;
+                this.#render();
+            });
+        })
+
+        // Confirm editing note
+        this.#addActionEventListener(this.#elements.editNoteConfirmAction, 'click', (e) => {
+            e.addEventListener('click', (e) => {
+                this.#submitEditNote();
+            });
+        });
+    }
+
+    #showModal(modalType) {
+        console.log('Showing modal ', modalType);
+        const modalsContainer = this.#elements.modalsContainerRole;
+        modalsContainer.classList.toggle('is-hidden', false);
+
+        // Hide all modals
+        const modals = modalsContainer.querySelectorAll('.modal');
+        modals.forEach(modal => modal.classList.add('is-hidden'));
+
+        const targetModal = this.#elements[modalType] ?? this.#elements.editNoteModalRole;
+        if (targetModal) {
+            targetModal.classList.toggle('is-hidden', false); // Show the target modal
+
+            // If the edit modal is being shown, pre-fill the form with the note details
+            if (modalType === 'editNoteModalRole' && this.#data.currentlyEditedNote) {
+                const noteId = this.#data.currentlyEditedNote;
+                const note = this.#data.notes.find(n => n.id === noteId);
+
+                if (note) {
+                    this.#elements.editNoteFormTitle.value = note.title;
+                    this.#elements.editNoteFormContent.value = note.content;
+                    console.log(note.title, note.content);
+                } else
+                    console.error('Cannot find proper note by id');
+            }
+        }
+    }
+
+
+    #hideModal() {
+        const modalsContainer = this.#elements.modalsContainerRole;
+        modalsContainer.querySelectorAll('.modal').forEach(modal => {
+            modal.classList.add('is-hidden'); // Hide all modals
+        });
+        modalsContainer.classList.toggle('is-hidden', true);
     }
 
     #submitNote() {
@@ -144,6 +206,29 @@ export default class App {
         this.#createNewNote(title, content, date);
     }
 
+    #submitEditNote() {
+        const title = this.#elements.newNoteFormTitle.value;
+        const content = this.#elements.newNoteFormContent.value;
+        const noteId = this.#data.currentlyEditedNote;
+
+        // TODO: Add proper title detection and user feedback
+        if (title === '' || content === '') {
+            window.alert('Make sure title and content are not empty.');
+            return;
+        }
+
+        // Find and update the note
+        const note = this.#data.notes.find(n => n.id === noteId);
+        if (note) {
+            note.title = title;
+            note.content = content;
+            this.#handleDataChange('notes');
+        }
+
+        // Close the modal
+        this.#hideModal();
+    }
+
     #createNewNote(title, content, date) {
         let note = new NoteComponent();
 
@@ -158,11 +243,12 @@ export default class App {
         this.#render(); // Manual render
 
         note.addEventListener('deleteNote', (event) => {
-            this.#handleDeleteNote(note.id); // Pass the unique ID
+            // this.#data.currentlyRemovedNote = note.id;
+            this.#handleDeleteNote(note.id);
         });
 
         note.addEventListener('editNote', (event) => {
-            // this.#handleEditNote(event.detail.title);
+            this.#data.currentlyEditedNote = note.id;
         });
     }
 
@@ -173,6 +259,7 @@ export default class App {
 
     /**
      * Check if two values are different from each other
+     * FIXME: Currently doesn't detect object differences properly, not used
      * @param {*} previousData First value
      * @param {*} currentData Second value
      * @returns {boolean} True if values differ
@@ -203,7 +290,7 @@ export default class App {
         return !deepEqual(previousData, currentData);
     }
 
-    // Looks for changes and rerenders app appriopriately
+    // Rerenders app
     #render() {
         const currentData = this.#data;
         const previousData = this.#previousData;
@@ -213,7 +300,9 @@ export default class App {
         this.#renderAddNewForm(currentData.notes.length == 0, currentData.ongoingAddNoteOperation);
 
         this.#renderNotes(currentData.notes);
-        console.log('NOTES CHANGED? ', this.#hasChanged(previousData.notes, currentData.notes));
+        console.log('Notes changed: ', this.#hasChanged(previousData.notes, currentData.notes));
+
+        this.#renderModals();
     }
 
     #renderAddNewForm(isEmpty, ongoingAddNoteOperation) {
@@ -226,17 +315,26 @@ export default class App {
         this.#toggleVisibility(this.#elements.addNoteFormRole, showAddForm);
     }
 
-    #renderNotes() {
+    #renderNotes(notes) {
         // Clear the notes container first to avoid duplicate rendering
         this.#elements.notesContainerRole.innerHTML = '';
 
         // Loop through the already existing note nodes in the data
-        this.#data.notes.forEach(noteNode => {
+        notes.forEach(noteNode => {
             // Re-attach the existing note node to the container
             this.#elements.notesContainerRole.appendChild(noteNode);
 
             console.info('Appending ', noteNode, ' to ', this.#elements.notesContainerRole);
         });
+    }
+
+    #renderModals() {
+        if (this.#data.currentlyEditedNote)
+            this.#showModal('editNoteModalRole');
+        else if (this.#data.currentlyRemovedNote)
+            this.#showModal('deleteNoteModalRole');
+        else
+            this.#hideModal();
     }
 
 }
