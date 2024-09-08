@@ -1,3 +1,7 @@
 .is-hidden {
 	display: none;
 }
+
+.has-width-auto {
+	width: auto;
+}

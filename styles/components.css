@@ -161,6 +161,7 @@ a.cancel-button:hover {
 	text-align: center;
 	width: 303px;
 	gap: 16px;
+	padding-block: 16px;
 }
 
 /* Badge ------------------ */
