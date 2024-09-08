@@ -1,5 +1,5 @@
 /**
- * I knows it's a bit of overkill for such small application but I thought 
+ * I know it's a bit of overkill for such small application but I thought 
  * I would show what benefits I would value in programming such apps.
  */
 export class NoteItem extends HTMLElement {
