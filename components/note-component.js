@@ -1,4 +1,4 @@
-export class NoteItem extends HTMLElement {
+export default class NoteComponent extends HTMLElement {
     constructor() {
         super();
         this._title = this.getAttribute('title') || '';
@@ -83,4 +83,4 @@ export class NoteItem extends HTMLElement {
 }
 
 // Register the component
-customElements.define('note-item', NoteItem);
+customElements.define('note-item', NoteComponent);

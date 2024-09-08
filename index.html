@@ -19,41 +19,41 @@
 </head>
 
 <body>
-    <div class="container">
+    <div class="container" id="app">
         <header class="header">
             <h5 class="header__main-title">
                 <i class="icon icon--note"></i> Notes
             </h5>
             <div class="search">
                 <i class="icon icon--magnifier"></i>
-                <input class="input input--search" type="text" placeholder="Search notes...">
+                <input data-role="search-input" class="input input--search" type="text" placeholder="Search notes...">
             </div>
-            <button class="button button--primary">Add New</button>
+            <button data-action="toggle-add-note" class="button button--primary">Add New</button>
         </header>
-        <div class="add-note is-hidden">
+        <div data-role="add-note" class="add-note is-hidden">
             <div class="add-note__header">
                 <h6>Add new note</h6>
                 <a href="#" class="cancel-button">Cancel</a>
             </div>
-            <input class="input" type="text" placeholder="Untitled Note">
+            <input data-role="search-input" class="input" type="text" placeholder="Untitled Note">
             <div class="add-note__content">
                 <textarea class="input" placeholder="Your note..."></textarea>
                 <button class="button button--primary">Add</button>
             </div>
         </div>
         <main class="content">
-            <div class="info-notes-empty is-hidden">
+            <div data-role="info-notes-empty" class="info-notes-empty is-hidden">
                 <div class="badge">
                     <i class="icon icon--info"></i>
                 </div>
                 <h5>No notes yet</h5>
                 <span>Add a note to keep track of your learnings.</span>
-                <button class="button button--secondary">
+                <button class="button button--secondary has-width-auto">
                     <i class="icon icon--note-add"></i>
                     <span>Add Note</span>
                 </button>
             </div>
-            <div class="notes">
+            <div data-role="notes-container" class="notes">
                 <!-- <div class="note">
                     <div class="note__header">
                         <h6>Note Title</h6>
@@ -81,7 +81,6 @@
         </div>
     </div>
 
-    <script type="module" src="./components/note-item.js"></script>
     <script type="module" src="main.js"></script>
 </body>
 

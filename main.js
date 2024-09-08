@@ -1,17 +1,27 @@
-import { NoteItem } from './components/note-component.js';
+import App from './components/app.js';
 
-let note = new NoteItem();
-note.title = 'Dynamic Note';
-note.content = 'This is dynamic content';
-note.date = new Date(2024, 4, 22); // May 22, 2024
+// Old testing code
+// import { NoteComponent } from './components/note-component.js';
 
-note = document.querySelector('.notes').appendChild(note);
+// let note = new NoteItem();
+// note.title = 'Dynamic Note';
+// note.content = 'This is dynamic content';
+// note.date = new Date(2024, 4, 22); // May 22, 2024
 
-note.addEventListener('deleteNote', (event) => {
-    console.log('Delete event triggered:', event.detail);
+// note = document.querySelector('.notes').appendChild(note);
+
+// note.addEventListener('deleteNote', (event) => {
+//     console.log('Delete event triggered:', event.detail);
+// });
+
+// setTimeout(() => {
+//     console.log('ran');
+//     note.title = "Changed";
+// }, 5000);
+
+// Initialize the app
+document.addEventListener('DOMContentLoaded', () => {
+    new App({
+        el: '#app'
+    });
 });
-
-setTimeout(() => {
-    console.log('ran');
-    note.title = "Changed";
-}, 5000);
