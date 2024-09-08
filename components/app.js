@@ -207,8 +207,8 @@ export default class App {
     }
 
     #submitEditNote() {
-        const title = this.#elements.newNoteFormTitle.value;
-        const content = this.#elements.newNoteFormContent.value;
+        const title = this.#elements.editNoteFormTitle.value;
+        const content = this.#elements.editNoteFormContent.value;
         const noteId = this.#data.currentlyEditedNote;
 
         // TODO: Add proper title detection and user feedback
@@ -222,8 +222,10 @@ export default class App {
         if (note) {
             note.title = title;
             note.content = content;
+            console.log('Edited note: ', note);
             this.#handleDataChange('notes');
-        }
+        } else
+            console.error('Cannot find proper note by id.');
 
         // Close the modal
         this.#hideModal();
