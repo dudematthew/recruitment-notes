@@ -1,7 +1,3 @@
-/**
- * I know it's a bit of overkill for such small application but I thought 
- * I would show what benefits I would value in programming such apps.
- */
 export class NoteItem extends HTMLElement {
     constructor() {
         super();
@@ -15,13 +11,13 @@ export class NoteItem extends HTMLElement {
     }
 
     connectedCallback() {
-        this._render();
-        this._attachEventListeners();
+        this.#render();
+        this.#attachEventListeners();
     }
 
-    _render() {
+    #render() {
         const dateISO = this._date.toISOString().split('T')[0];
-        const formattedDate = this._formatDateToMonthDay(this._date);
+        const formattedDate = this.#formatDateToMonthDay(this._date);
 
         this.innerHTML = `
       <div class="note__header">
@@ -38,39 +34,39 @@ export class NoteItem extends HTMLElement {
     `;
     }
 
-    _formatDateToMonthDay(date) {
+    #formatDateToMonthDay(date) {
         const options = { month: 'short', day: 'numeric' };
         return date.toLocaleDateString('en-US', options);
     }
 
-    _attachEventListeners() {
-        this.querySelector('.icon--edit').addEventListener('click', () => this._handleEdit());
-        this.querySelector('.icon--trash-can').addEventListener('click', () => this._handleDelete());
+    #attachEventListeners() {
+        this.querySelector('.icon--edit').addEventListener('click', () => this.#handleEdit());
+        this.querySelector('.icon--trash-can').addEventListener('click', () => this.#handleDelete());
     }
 
-    _handleEdit() {
+    #handleEdit() {
         const event = new CustomEvent('editNote', { detail: { title: this._title } });
         this.dispatchEvent(event);
     }
 
-    _handleDelete() {
+    #handleDelete() {
         const event = new CustomEvent('deleteNote', { detail: { title: this._title } });
         this.dispatchEvent(event);
     }
 
     set title(newTitle) {
         this._title = newTitle;
-        this._render();
+        this.#render();
     }
 
     set content(newContent) {
         this._content = newContent;
-        this._render();
+        this.#render();
     }
 
     set date(newDate) {
         this._date = new Date(newDate);
-        this._render();
+        this.#render();
     }
 
     get title() {
