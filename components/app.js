@@ -60,6 +60,7 @@ export default class App {
             submitNewNoteAction: this.#el.querySelectorAll('[data-action="submit-new-note"]'),
             hideModalsAction: this.#el.querySelectorAll('[data-action="hide-modals"]'),
             editNoteConfirmAction: this.#el.querySelectorAll('[data-action="edit-note-confirm"]'),
+            confirmDeleteAction: this.#el.querySelectorAll('[data-action="delete-note-confirm"]'),
 
             // Roles
             addButtonRole: this.#el.querySelector('[data-role="add-note"]'),
@@ -153,6 +154,14 @@ export default class App {
                 this.#submitEditNote();
             });
         });
+
+        // Confirm deleting note
+        this.#addActionEventListener(this.#elements.confirmDeleteAction, 'click', (e) => {
+            e.addEventListener('click', (e) => {
+                this.#confirmDeleteNote();
+            });
+        });
+
     }
 
     #showModal(modalType) {
@@ -231,6 +240,16 @@ export default class App {
         this.#hideModal();
     }
 
+    #confirmDeleteNote() {
+        const noteId = this.#data.currentlyRemovedNote;
+        if (noteId) {
+            this.#handleDeleteNote(noteId);
+            this.#data.currentlyRemovedNote = null;
+        }
+        this.#hideModal();
+    }
+
+
     #createNewNote(title, content, date) {
         let note = new NoteComponent();
 
@@ -245,8 +264,7 @@ export default class App {
         this.#render(); // Manual render
 
         note.addEventListener('deleteNote', (event) => {
-            // this.#data.currentlyRemovedNote = note.id;
-            this.#handleDeleteNote(note.id);
+            this.#data.currentlyRemovedNote = note.id;
         });
 
         note.addEventListener('editNote', (event) => {
