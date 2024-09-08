@@ -28,17 +28,18 @@
                 <i class="icon icon--magnifier"></i>
                 <input data-role="search-input" class="input input--search" type="text" placeholder="Search notes...">
             </div>
-            <button data-action="toggle-add-note" class="button button--primary">Add New</button>
+            <button data-action="add-new-note" data-role="add-note" class="button button--primary">Add
+                New</button>
         </header>
-        <div data-role="add-note" class="add-note is-hidden">
+        <div data-role="add-note-form" class="add-note is-hidden">
             <div class="add-note__header">
                 <h6>Add new note</h6>
-                <a href="#" class="cancel-button">Cancel</a>
+                <a data-action="cancel-new-note" href="#" class="cancel-button">Cancel</a>
             </div>
-            <input data-role="search-input" class="input" type="text" placeholder="Untitled Note">
+            <input data-role="new-note-title" class="input" type="text" placeholder="Untitled Note">
             <div class="add-note__content">
-                <textarea class="input" placeholder="Your note..."></textarea>
-                <button class="button button--primary">Add</button>
+                <textarea data-role="new-note-content" class="input" placeholder="Your note..."></textarea>
+                <button data-action="submit-new-note" class="button button--primary">Add</button>
             </div>
         </div>
         <main class="content">
@@ -48,7 +49,7 @@
                 </div>
                 <h5>No notes yet</h5>
                 <span>Add a note to keep track of your learnings.</span>
-                <button class="button button--secondary has-width-auto">
+                <button data-action="add-new-note" class="button button--secondary has-width-auto">
                     <i class="icon icon--note-add"></i>
                     <span>Add Note</span>
                 </button>
@@ -70,12 +71,22 @@
             </div>
         </main>
         <div class="modals is-hidden">
-            <div class="modal">
+            <div class="modal is-hidden">
                 <h5>Delete Note</h5>
                 <span>Are you sure you want to delete this note?</span>
                 <div class="modal__buttons">
                     <button class="button button--secondary">Cancel</button>
                     <button class="button button--primary">Delete</button>
+                </div>
+            </div>
+            <div class="modal is-hidden">
+                <h5>Edit Note</h5>
+                <span>Modify your note.</span>
+                <input class="input" type="text" placeholder="Note title">
+                <textarea class="input" placeholder="Your note..."></textarea>
+                <div class="modal__buttons">
+                    <button class="button button--secondary">Cancel</button>
+                    <button class="button button--primary">Save</button>
                 </div>
             </div>
         </div>

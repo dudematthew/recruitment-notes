@@ -19,15 +19,17 @@ export default class App {
         this.#previousData = this.#initializeData(); // Initialize previous data state
         this.#elements = this.#initializeElements(); // Initialize DOM elements references
         this.#data = this.#makeReactive(this.#data); // Make data reactive
-        this.#render(this.#previousData, this.#data);
+        this.#render();
         this.#setupEventListeners();
     }
 
-    // TODO: Load data from Local Storage
     #initializeData() {
         return {
-            /** @type {'add' | 'edit' | null} */
-            currentOperation: null,
+            /** @type {boolean} */
+            ongoingAddNoteOperation: false,
+
+            /** @type {boolean} */
+            ongoingEditNoteOperation: false,
 
             /** @type {Array<Note>} */
             notes: [],
@@ -36,24 +38,39 @@ export default class App {
 
     /** 
      * @returns {{
-     *   addButton: HTMLElement,
-     *   addNoteForm: HTMLElement,
-     *   searchInput: HTMLElement,
-     *   notesContainer: HTMLElement,
-     *   infoNotesEmpty: HTMLElement
+     *   addNoteAction: Array<HTMLElement>
+     *   addButtonRole: HTMLElement,
+     *   addNoteFormRole: HTMLElement,
+     *   searchInputRole: HTMLElement,
+     *   notesContainerRole: HTMLElement,
+     *   infoNotesEmptyRole: HTMLElement
      * }}
      */
     #initializeElements() {
         return {
-            addButton: this.#el.querySelector('[data-action="toggle-add-note"]'),
-            addNoteForm: this.#el.querySelector('[data-role="add-note"]'),
-            searchInput: this.#el.querySelector('[data-role="search-input"]'),
-            notesContainer: this.#el.querySelector('[data-role="notes-container"]'),
-            infoNotesEmpty: this.#el.querySelector('[data-role="info-notes-empty"]'),
+            // Actions
+            addNoteAction: this.#el.querySelectorAll('[data-action="add-new-note"]'),
+            cancelAddNoteAction: this.#el.querySelectorAll('[data-action="cancel-new-note"]'),
+            submitNewNoteAction: this.#el.querySelectorAll('[data-action="submit-new-note"]'),
+
+            // Roles
+            addButtonRole: this.#el.querySelector('[data-role="add-note"]'),
+            addNoteFormRole: this.#el.querySelector('[data-role="add-note-form"]'),
+            newNoteFormTitle: this.#el.querySelector('[data-role="new-note-title"]'),
+            newNoteFormContent: this.#el.querySelector('[data-role="new-note-content"]'),
+            searchInputRole: this.#el.querySelector('[data-role="search-input"]'),
+            notesContainerRole: this.#el.querySelector('[data-role="notes-container"]'),
+            infoNotesEmptyRole: this.#el.querySelector('[data-role="info-notes-empty"]'),
         };
     }
 
-    // Make the app watch for any changes to the data object
+    /**
+     * Make the app watch for any changes to the data object
+     * Haven't had time to add full detection of array modification
+     * TODO: Add detection of methods like .push()
+     * @param {*} data 
+     * @returns 
+     */
     #makeReactive(data) {
         return new Proxy(data, {
             set: (target, prop, value) => {
@@ -64,27 +81,102 @@ export default class App {
         });
     }
 
+    /**
+     * Applies is-hidden class or removes it
+     * @param {HTMLElement} element 
+     * @param {boolean} isVisible 
+     */
+    #toggleVisibility(element, isVisible = true) {
+        element.classList.toggle('is-hidden', !isVisible);
+    }
+
     #handleDataChange(prop) {
-        const currentData = this.#data;
-        this.#render(this.#previousData, currentData);
+        this.#render();
         // Update previousData to the current state after rendering
-        this.#previousData = { ...currentData };
+        this.#previousData = { ...this.#data };
+    }
+
+    #addActionEventListener(elements, action, callback) {
+        elements.forEach(element => {
+            element.addEventListener(action, callback(element));
+        });
     }
 
     #setupEventListeners() {
-        // this.#el.querySelector('.button--primary').addEventListener('click', () => {
-        //     this.#toggleAddNoteVisibility();
-        // });
+        // Add note action
+        this.#addActionEventListener(this.#elements.addNoteAction, 'click', (e) => {
+            e.addEventListener('click', (e) => {
+                this.#data.ongoingAddNoteOperation = true;
+            });
+        })
 
-        // this.#el.querySelector('.add-note .button--primary').addEventListener('click', () => {
-        //     this.#addNewNote();
-        // });
+        // Cancel adding note action
+        this.#addActionEventListener(this.#elements.cancelAddNoteAction, 'click', (e) => {
+            e.addEventListener('click', (e) => {
+                this.#data.ongoingAddNoteOperation = false;
+            });
+        })
+
+        // Submit new note
+        this.#addActionEventListener(this.#elements.submitNewNoteAction, 'click', (e) => {
+            e.addEventListener('click', (e) => {
+                this.#data.ongoingAddNoteOperation = false;
+                this.#submitNote();
+            });
+        })
 
         // this.#el.querySelector('.search .input--search').addEventListener('input', (e) => {
         //     this.#filterNotes(e.target.value);
         // });
     }
 
+    #submitNote() {
+        const title = this.#elements.newNoteFormTitle.value;
+        const content = this.#elements.newNoteFormContent.value;
+        const date = new Date();
+
+        // TODO: Add proper title detection and user feedback
+        if (title == '' || content == '') {
+            window.alert('Make sure title and content is not empty.');
+            return;
+        }
+
+        this.#createNewNote(title, content, date);
+    }
+
+    #createNewNote(title, content, date) {
+        let note = new NoteComponent();
+
+        note.title = title;
+        note.content = content;
+        note.date = date;
+
+        // Use the date as a unique identifier
+        note.id = date.toISOString(); // Set an ID for the note
+
+        this.#data.notes.push(note);
+        this.#render(); // Manual render
+
+        note.addEventListener('deleteNote', (event) => {
+            this.#handleDeleteNote(note.id); // Pass the unique ID
+        });
+
+        note.addEventListener('editNote', (event) => {
+            // this.#handleEditNote(event.detail.title);
+        });
+    }
+
+    #handleDeleteNote(noteId) {
+        this.#data.notes = this.#data.notes.filter(note => note.id !== noteId);
+        this.#render(); // Update the view after deletion
+    }
+
+    /**
+     * Check if two values are different from each other
+     * @param {*} previousData First value
+     * @param {*} currentData Second value
+     * @returns {boolean} True if values differ
+     */
     #hasChanged(previousData, currentData) {
         function deepEqual(a, b) {
             if (a === b) return true;
@@ -111,15 +203,40 @@ export default class App {
         return !deepEqual(previousData, currentData);
     }
 
-
     // Looks for changes and rerenders app appriopriately
-    #render(previousData, currentData) {
+    #render() {
+        const currentData = this.#data;
+        const previousData = this.#previousData;
+
         console.info('Rendering the app: ', currentData);
-        this.#switchInfoIfNotesEmpty(currentData.notes.length == 0);
+
+        this.#renderAddNewForm(currentData.notes.length == 0, currentData.ongoingAddNoteOperation);
+
+        this.#renderNotes(currentData.notes);
+        console.log('NOTES CHANGED? ', this.#hasChanged(previousData.notes, currentData.notes));
     }
 
-    #switchInfoIfNotesEmpty(isEmpty) {
-        this.#elements.addButton.classList.toggle('is-hidden', isEmpty);
-        this.#elements.infoNotesEmpty.classList.toggle('is-hidden', !isEmpty);
+    #renderAddNewForm(isEmpty, ongoingAddNoteOperation) {
+        const showEmptyInfo = isEmpty && !ongoingAddNoteOperation;
+        const showAddForm = ongoingAddNoteOperation;
+        const showAddButton = !ongoingAddNoteOperation && !isEmpty;
+
+        this.#toggleVisibility(this.#elements.infoNotesEmptyRole, showEmptyInfo);
+        this.#toggleVisibility(this.#elements.addButtonRole, showAddButton);
+        this.#toggleVisibility(this.#elements.addNoteFormRole, showAddForm);
     }
+
+    #renderNotes() {
+        // Clear the notes container first to avoid duplicate rendering
+        this.#elements.notesContainerRole.innerHTML = '';
+
+        // Loop through the already existing note nodes in the data
+        this.#data.notes.forEach(noteNode => {
+            // Re-attach the existing note node to the container
+            this.#elements.notesContainerRole.appendChild(noteNode);
+
+            console.info('Appending ', noteNode, ' to ', this.#elements.notesContainerRole);
+        });
+    }
+
 }
