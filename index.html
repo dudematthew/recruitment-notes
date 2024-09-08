@@ -13,7 +13,7 @@
     <link rel="icon" type="image/png" href="favicon.png">
 
     <link rel="stylesheet" href="styles/main.css">
-    <link rel="stylesheet" href="styles/elements.css">
+    <link rel="stylesheet" href="styles/components.css">
     <link rel="stylesheet" href="icons/icons.css">
     <link rel="stylesheet" href="styles/modifiers.css">
 </head>
@@ -54,7 +54,7 @@
                 </button>
             </div>
             <div class="notes">
-                <div class="note multiply">
+                <!-- <div class="note">
                     <div class="note__header">
                         <h6>Note Title</h6>
                         <div class="note__header__buttons">
@@ -66,7 +66,7 @@
                         Very long Note Body to give you an example on how the box should act
                     </div>
                     <time datetime="2024-05-22" class="note__date">May 22</time>
-                </div>
+                </div> -->
             </div>
         </main>
         <div class="modals is-hidden">
@@ -81,17 +81,8 @@
         </div>
     </div>
 
-    <script>
-        // Simple quick code to duplicate notes
-        document.querySelectorAll('.multiply').forEach(element => {
-            for (let i = 0; i < 5; i++) {
-                const clone = element.cloneNode(true);
-                element.parentNode.insertBefore(clone, element.nextSibling);
-            }
-        });
-    </script>
-
-    <script src="./main.js"></script>
+    <script type="module" src="./components/note-item.js"></script>
+    <script type="module" src="main.js"></script>
 </body>
 
 </html>
