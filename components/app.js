@@ -1,7 +1,7 @@
 import NoteComponent from './note-component.js';
 
 /**
- * @typedef {Object} Note
+ * @typedef {Object} Note Example of using ecma definitions
  * @property {string} title - The title of the note.
  * @property {string} content - The content of the note.
  * @property {string} date - The date of the note as an ISO string.
@@ -42,16 +42,6 @@ export default class App {
         };
     }
 
-    /** 
-     * @returns {{
-     *   addNoteAction: Array<HTMLElement>
-     *   addButtonRole: HTMLElement,
-     *   addNoteFormRole: HTMLElement,
-     *   searchInputRole: HTMLElement,
-     *   notesContainerRole: HTMLElement,
-     *   infoNotesEmptyRole: HTMLElement
-     * }}
-     */
     #initializeElements() {
         return {
             // Actions
